@@ -1,28 +1,60 @@
 import logo from './logo.svg';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import StartPage from './StartPage';
-import Example from './Example';
-// ### 1. 유저 설정
+import StartPage from './components/StartPage';
+import Example from './components/Example';
+import TestPage from './components/TestPage';
+import TestFinish from './components/TestFinish';
+import {UserContext , ExContext, AnswerContext} from './context/Context';
 
-// - 이름을 입력할 수 있는 폼을 구현합니다.
-// - 성별을 선택할 수 있는 폼을 구현합니다.
-// - 이름 혹은 성별을 기입하지 않거나 선택하지 않을 경우 검사 시작 버튼이 비활성화 되어야 합니다.
-
-// ### 2. 검사 예시 페이지
-
-// - 검사를 시작하기 전 앞으로의 진행 방식에 대해서 설명하는 페이지를 구현합니다.
-// - 진행 방식에 대한 검사 예제 문항이 한 문항을 화면에 표시합니다.
-// - 검사 시작 버튼을 구현합니다.
-
+// todo
+// 이름을 올바르게 입력하지 않았을 경우, 이에 대한 안내 메세지를 출력합니다. => onChange 혹은 onBlur 사용
+// 성별을 선택하지 않았을 경우, 이에 대한 안내 메세지를 출력합니다.
+// 검사 예시 페이지부터는 진행 표시줄(Progress bar)가 포함 되어야 있어야 하며, 검사 예시 페이지는 0%로 측정되어야 합니다.(진행 표시줄의 형태는 무관합니다.)
+// eventhandler에서 useCallback 사용하기
 
 function App() {
+  const [user, setUser] = useState({name: '', gender:''});
+  const userValue = {user, setUser};
+
+  const [check, setCheck] = useState('');
+  const exValue = {check, setCheck};
+
+  const [answer, setAnswer] = useState({});
+  const answerValue = {answer, setAnswer};
+
   return (
     <main>
     <Switch>
-       <Route path='/' component={StartPage} exact/>
-       <Route path='/example' component={Example}/>
+      <Route path='/' exact>
+        <UserContext.Provider value={userValue}>
+          <div>
+            <StartPage/>
+          </div>
+        </UserContext.Provider>
+      </Route>
+
+      <Route path='/example' >
+        <ExContext.Provider value={exValue}>
+          <div>
+            <Example/>
+          </div>
+        </ExContext.Provider>
+      </Route>
+
+      <Route path='/test'>
+        <AnswerContext.Provider value= {answerValue}>
+          <div>
+            <TestPage/>
+          </div>
+        </AnswerContext.Provider>
+      </Route>
+
+      <Route path='/finish'>
+          <TestFinish/>
+      </Route>
+
     </Switch>
     </main>
   );
