@@ -36,8 +36,12 @@ function StartPage(){
         <label>성별</label>
         <br/>
         <div class="gender">
-          <input type="radio" value="100323" name="gender" onChange={handleValue} checked={user.gender ==="100323"}/>남성
-          <input type="radio" value="100324" name="gender" onChange={handleValue} checked={user.gender === "100324"}/>여성
+          <label>
+            <input type="radio" value="100323" name="gender" onChange={handleValue} checked={user.gender ==="100323"}/>남성
+          </label>
+          <label>
+            <input type="radio" value="100324" name="gender" onChange={handleValue} checked={user.gender === "100324"}/>여성
+          </label>
         </div>
         <span style={{color: "red"}}>{error.gender}</span>
         <br/>

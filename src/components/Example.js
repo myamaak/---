@@ -41,8 +41,12 @@ function Example(){
             <h2>검사 예시</h2>
             <p>{item.question}</p>
             <div class='radio'>
-                <input type='radio' name='answer' onChange={handleCheck} value={item.score[0]} checked={check === item.score[0]}/>{item.answer[0]}
-                <input type='radio' name='answer' onChange={handleCheck} value={item.score[1]} checked={check === item.score[1]}/>{item.answer[1]}
+                <label>
+                    <input type='radio' name='answer' onChange={handleCheck} value={item.score[0]} checked={check === item.score[0]}/>{item.answer[0]}
+                </label>
+                <label>
+                    <input type='radio' name='answer' onChange={handleCheck} value={item.score[1]} checked={check === item.score[1]}/>{item.answer[1]}
+                </label>
             </div>
             <Link to = '/'><input type="button" value="이전" ></input></Link>
             <Link to = '/test'><input type="button" value="검사 시작" disabled={check ? false: true}></input></Link>
