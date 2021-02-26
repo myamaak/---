@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import API_KEY from '../config';
 import {AnswerContext, UserContext} from '../context/Context';
@@ -6,7 +6,7 @@ import { useHistory, Link } from "react-router-dom";
 
 function TestPage(){
     const {user, setUser} = useContext(UserContext);
-    const {answer, setAnswer} = useContext(AnswerContext);
+    const {answer, setAnswer} = useContext(AnswerContext);//답 여러개니까 answers로 바꿔주는게 좋음
 
     const [items, setItems] = useState([]);
     const [page, setPage] = useState();
@@ -37,7 +37,7 @@ function TestPage(){
             (item)=>(
                 <div key ={item.qitemNo}>
                     <p>{item.qitemNo} {item.question}</p>
-                    <div class='radio'>
+                    <div className='radio'>
                         <label>
                             <input 
                                 type='radio' 
@@ -142,18 +142,23 @@ function TestPage(){
             newAnswers[questionsNum-1] = e.target.value;
             return newAnswers;
         });  
+
     }
 
-    var size = answer.filter(function(value) { return value !== undefined }).length;
+
+    const size = useMemo(()=>{
+        return answer.filter(function(value) { return value !== undefined }).length;
+    },[answer]) 
 
     console.log(size);
+
     const nextB = (<input type = "button" value = "다음 >" onClick={handleRight} disabled={size >= 5*(page+1)? false: true}/> );
     const submB = (<input type = "button" value = "제출 >" onClick={handleSubmit} disabled={size === items.length? false: true}/>);
 
     return(
-        <form class="container" >
+        <form className="container" >
             <h2>검사 진행 {Math.ceil(size/answer.length*100)}%</h2>
-            <progress value={size} max="28"></progress>
+            <progress value={size} max={answer.length}></progress>
             {thisP}
             <div>
                 <input type = "button" value = "< 이전" onClick={handleLeft}/>

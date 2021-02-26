@@ -37,10 +37,12 @@ function Example(){
     //option이 여러개일 경우를 대비해서 이런 식으로 코드를 짜고 싶은데 item.answer이 undefined로 나타남
 
     return(
-        <div class="container">
+        <div className="container">
             <h2>검사 예시</h2>
+            <h3>0%</h3>
+            <progress value="0" max="100"></progress>
             <p>{item.question}</p>
-            <div class='radio'>
+            <div className='radio'>
                 <label>
                     <input type='radio' name='answer' onChange={handleCheck} value={item.score[0]} checked={check === item.score[0]}/>{item.answer[0]}
                 </label>

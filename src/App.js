@@ -16,6 +16,17 @@ import {UserContext , ExContext, AnswerContext} from './context/Context';
 // event 관련 함수에서 useCallback 사용하기 -> 사용하지 않으면 변수가 변경되었을때 잘 적용되지 않을 수도 있다.
 
 // useMemo -> useEffect랑 비슷한데 return값을 받아서 변수에 저장 가능!
+
+//reactstrap
+//rechart
+//
+//다음버튼 disabled일때 누르면 alert 띄워주기...(왜 넘어갈 수 없는지)
+
+
+//구현 추천
+//이전 버튼은 너무 많이 눌러야 될 수 있으니까 맨 밑에 누르면 해당 페이지로 이동 가능한 버튼 숫자로 만들기!(페이징, pagenation)
+//검사결과 sns 공유기능
+//추천 직종 시각화해서 보여주기 하고싶어 d3나 그..그거 써보기 이고잉님이 좋아하시는거
 function App() {
   const [user, setUser] = useState({name: '', gender:''});
   const userValue = {user, setUser};

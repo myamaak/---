@@ -28,14 +28,14 @@ function StartPage(){
       <form>
         <label>이름</label>
         <br/>
-        <input class={!user.name ? "invalid-input": "input"} type="text" name="name" onChange={handleValue} 
+        <input className={!user.name ? "invalid-input": "input"} type="text" name="name" onChange={handleValue} 
          value={user.name}></input>
         <span style={{color: "red"}}>{error.name}</span>
         <br/>
         <br/>
         <label>성별</label>
         <br/>
-        <div class="gender">
+        <div className="gender">
           <label>
             <input type="radio" value="100323" name="gender" onChange={handleValue} checked={user.gender ==="100323"}/>남성
           </label>
@@ -51,7 +51,5 @@ function StartPage(){
     );
   }
 
-  //다음 페이지에 다녀온 후에도 입력 정보 유지하기 위해서는 어떻게 하지?
-  //redux, useContext 사용
 
   export default StartPage;
