@@ -105,7 +105,7 @@ function RelatedJobs(props){
   var finalContents = props.factors.map(function(value, ind){
     return[value,jobsTableContents[ind]]
   })
-
+ 
   console.log(finalContents);
   //각각 만든다음 map으로 zip같이 만들기..?
       return(
