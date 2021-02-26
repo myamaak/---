@@ -110,7 +110,7 @@ function RelatedJobs(props){
   //각각 만든다음 map으로 zip같이 만들기..?
       return(
           <table>
-            <caption>종사자 평균 전공별</caption>
+            <caption>종사자 평균 학력별</caption>
             <thead>
               <tr>
                 <th>분야</th>
