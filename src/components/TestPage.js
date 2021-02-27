@@ -146,22 +146,55 @@ function TestPage(){
     }
 
 
+
+
     const size = useMemo(()=>{
         return answer.filter(function(value) { return value !== undefined }).length;
     },[answer]) 
 
-    console.log(size);
+    console.log(page);
 
     const nextB = (<input type = "button" value = "다음 >" onClick={handleRight} disabled={size >= 5*(page+1)? false: true}/> );
     const submB = (<input type = "button" value = "제출 >" onClick={handleSubmit} disabled={size === items.length? false: true}/>);
 
+    const handlePageChange = (e) =>{
+        e.preventDefault();
+        setPage(Number(e.target.id));
+    }
+
+    let allPages = [0]
+    for(var i =1 ; i<=Math.floor(size/5);i++){
+        if(i != Math.ceil(answer.length/5)+1){
+            allPages.push(i);
+        }
+    }
+    const linkStyle={
+        margin: "10px",
+        color: "black"
+    }
+    
+    const clickedStyle={
+        margin: "10px",
+        color: "red"
+    }
+    //이부분 나중에 css로 빼기..
+    
+    const pagination = allPages.map(
+        (eachPage)=>(
+            <a href="#" 
+                id={eachPage}
+                onClick={handlePageChange} 
+                key={eachPage} 
+                style={page == eachPage? linkStyle : clickedStyle}>{eachPage}</a>));
+
     return(
         <form className="container" >
-            <h2>검사 진행 {Math.ceil(size/answer.length*100)}%</h2>
+            <h2>검사 진행 {size? Math.ceil(size/answer.length*100): 0}%</h2>
             <progress value={size} max={answer.length}></progress>
             {thisP}
-            <div>
+            <div className ="pagination">
                 <input type = "button" value = "< 이전" onClick={handleLeft}/>
+                {pagination}
                 {page===5? submB : nextB}
             </div>
         </form>
