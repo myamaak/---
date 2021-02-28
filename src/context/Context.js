@@ -10,8 +10,8 @@ export const ExContext = React.createContext({
   setCheck : () => {}
 })
 
-export const AnswerContext = React.createContext({
-  answer : [],
-  setAnswer : () => {}
+export const AnswersContext = React.createContext({
+  answers : [],
+  setAnswers : () => {}
 })
 

@@ -6,7 +6,6 @@ function StartPage(){
     const {user, setUser} = useContext(UserContext);
     const [error, setError] = useState({name:'', gender:''});
   
-    //아래와 같은 eventhandler에서 useCallback 사용하기
     const handleValue = useCallback(e =>{
         setUser(state =>({...state, [e.target.name]: e.target.value}));
         // handleValidation();

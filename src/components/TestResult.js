@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext,useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {Bar} from 'react-chartjs-2';
-import { AnswerContext, UserContext } from '../context/Context';
+import { AnswersContext, UserContext } from '../context/Context';
 
 
 function Intro(){
@@ -174,7 +174,7 @@ function TestResult(){
     const { seq } = useParams();
     const test_result_api = `https://inspct.career.go.kr/inspct/api/psycho/report?seq=${seq}`;
     const {user, setUser} = useContext(UserContext);
-    const {answer, setAnswer} = useContext(AnswerContext);
+    const {answers, setAnswers} = useContext(AnswersContext);
 
     const [userInfo, setUserInfo] = useState({});
     const [Score, setScore] = useState();
@@ -192,7 +192,7 @@ function TestResult(){
 
     const clearAll = e => { 
       setUser({name: '', gender:''});
-      setAnswer([]);
+      setAnswers([]);
     }
 
     //학력별 머시기 가져오는 함수

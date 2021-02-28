@@ -7,7 +7,7 @@ import Example from './components/Example';
 import TestPage from './components/TestPage';
 import TestFinish from './components/TestFinish';
 import TestResult from './components/TestResult';
-import {UserContext , ExContext, AnswerContext} from './context/Context';
+import {UserContext , ExContext, AnswersContext} from './context/Context';
 
 // todo
 // 이름을 올바르게 입력하지 않았을 경우, 이에 대한 안내 메세지를 출력합니다. => onChange 혹은 onBlur 사용
@@ -39,8 +39,8 @@ function App() {
   const [check, setCheck] = useState('');
   const exValue = {check, setCheck};
 
-  const [answer, setAnswer] = useState([]);
-  const answerValue = {answer, setAnswer};
+  const [answers, setAnswers] = useState([]);
+  const answersValue = {answers, setAnswers};
 
   return (
     <main>
@@ -63,11 +63,11 @@ function App() {
 
       <Route path='/test'>
         <UserContext.Provider value={userValue}>
-          <AnswerContext.Provider value= {answerValue}>
+          <AnswersContext.Provider value= {answersValue}>
             <div>
               <TestPage/>
             </div>
-          </AnswerContext.Provider>
+          </AnswersContext.Provider>
           </UserContext.Provider>
       </Route>
 
@@ -87,11 +87,11 @@ function App() {
 
       <Route path='/result/:seq'>
         <UserContext.Provider value={userValue}>
-          <AnswerContext.Provider value= {answerValue}>
+          <AnswersContext.Provider value= {answersValue}>
           <div>
             <TestResult/>
           </div>
-          </AnswerContext.Provider>
+          </AnswersContext.Provider>
         </UserContext.Provider>
       </Route>
 
