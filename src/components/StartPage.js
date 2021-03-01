@@ -1,24 +1,44 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {UserContext} from '../context/Context';
-
 
 function StartPage(){
     const {user, setUser} = useContext(UserContext);
     const [error, setError] = useState({name:'', gender:''});
   
-    //아래와 같은 eventhandler에서 useCallback 사용하기
-    const handleValue = e =>{
+    const handleValue = useCallback(e =>{
         setUser(state =>({...state, [e.target.name]: e.target.value}));
+        // handleValidation();
+        //이 안에서 handleValidation 함수를 호출하면 한박자 늦게 기능하는데, 이게 정확히 왜 그런건지 궁금.
+    },[user.name, user.gender])
+
+    const useDidMountEffect = (func, deps)=>{
+      const didMount = useRef(false);
+      useEffect(()=>{
+        if(didMount.current)func();
+        else didMount.current = true;
+      }, deps);
     }
 
-    // const handleValidation = () => {
-    //     if(!prof.name){
-    //         setError(state=>({...state, name:"이름을 입력해주세요."}));
-    //     }else{
-    //         setError(state=>({...state, name:""}));
-    //     }
-    // }
+    //맨 처음 아무 입력도 없었을때는 에러를 띄우지 않는 방법 
+    //=> user 값이 바뀌었을 때만이 아니라 initial render 에서도 useEffect가 실행되는데 이걸 막고싶음.
+    //커스텀 훅으로 update일때만 실행되도록 했는데...이게 그다지 효율적이지 않을 것 같아서 걱정.
+    const handleValidation = useCallback(()=>{
+      if(!user.name){
+        setError(state=>({...state, name:"이름을 입력해주세요."}));
+      }else{
+        setError(state=>({...state, name:""}));
+      }
+      if(!user.gender){
+        setError(state=>({...state, gender:"성별을 선택해주세요."}));
+      }else{
+        setError(state=>({...state, gender:""}));
+      }
+    },[user]);
+
+    useDidMountEffect(()=>{
+      handleValidation();
+    },[user])
   
     console.log(user);
   

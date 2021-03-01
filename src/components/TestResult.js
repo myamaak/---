@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useContext,useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import API_KEY from '../config';
 import {Bar} from 'react-chartjs-2';
+import { AnswersContext, UserContext } from '../context/Context';
 
 
 function Intro(){
@@ -81,33 +81,29 @@ class BarChart extends React.Component {
   
 function RelatedJobs(props){
   //아 api 구조 너무 화가 난다..!
-  var jobsTableContents = [];
+  let jobsTableContents = [];
 
 
   for (var i=0; i<props.factors.length; i++){
-    // var eachRow = "";
-    var eachRow = props.data.map(each=>{
+    let eachRow = props.data.map(each=>{
       return each[2]==i+1?
-      <>
-       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`}>{each[1]}</a>{" "}
-       </>:""
+       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`} 
+       style={{marginRight:"10px"}}
+       key={each[0]}>
+         {each[1]}
+       </a>:""
       });
-    // for(var j=0; j<props.data.length; j++){
-    //   if (props.data[j][2]==i+1){
-    //     eachRow+=`<a href ="http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${props.data[j][0]}">${props.data[j][1]}</a>`;
-    //   }
-    // }
+
     eachRow = eachRow.filter(function(element){ return element != "";});
     jobsTableContents.push(eachRow);
   }
  
-  console.log(jobsTableContents)
-  var finalContents = props.factors.map(function(value, ind){
+  let finalContents = props.factors.map(function(value, ind){
     return[value,jobsTableContents[ind]]
-  })
- 
-  console.log(finalContents);
-  //각각 만든다음 map으로 zip같이 만들기..?
+  });
+
+  finalContents = finalContents.filter(function(element){ return element[1] != "";});
+  
       return(
           <table>
             <caption>종사자 평균 학력별</caption>
@@ -119,39 +115,39 @@ function RelatedJobs(props){
             </thead>
             <tbody>
               {finalContents.map(each=>{
-                return(each[1] !=""? <tr>
-              <td>{each[0]}</td>
-              <td>{each[1]}</td>
-              </tr>: "")
-              })}
+                return(
+                <tr key={each[0]}>
+                  <td>{each[0]}</td>
+                  <td>{each[1]}</td>
+                </tr>
+              )})}
             </tbody>
           </table>
       );
 }
 
 function RelatedMajors(props){
-  //아 api 구조 너무 화가 난다..!
-  var jobsTableContents = [];
-
+  let jobsTableContents = [];
 
   for (var i=0; i<props.factors.length; i++){
-    // var eachRow = "";
-    var eachRow = props.data.map(each=>{
-      return each[2]==i?
-      <>
-       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`}>{each[1]}</a>{" "}
-       </>:""
+    let eachRow = props.data.map(each=>{
+      return each[2]==i+1?
+       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`} 
+       style={{marginRight:"10px"}}
+       key={each[0]}>
+         {each[1]}
+       </a>:""
       });
+
     eachRow = eachRow.filter(function(element){ return element != "";});
     jobsTableContents.push(eachRow);
   }
  
-  console.log(jobsTableContents)
-  var finalContents = props.factors.map(function(value, ind){
+  let finalContents = props.factors.map(function(value, ind){
     return[value,jobsTableContents[ind]]
-  })
+  });
 
-  console.log(finalContents);
+  finalContents = finalContents.filter(function(element){ return element[1] != "";});
       return(
           <table>
             <caption>종사자 평균 전공별</caption>
@@ -162,12 +158,13 @@ function RelatedMajors(props){
               </tr>
             </thead>
             <tbody>
-              {finalContents.map(each=>{
-                return(each[1] !=""? <tr>
-              <td>{each[0]}</td>
-              <td>{each[1]}</td>
-              </tr>: "")
-              })}
+            {finalContents.map(each=>{
+                return(
+                <tr key={each[0]}>
+                  <td>{each[0]}</td>
+                  <td>{each[1]}</td>
+                </tr>
+              )})}
             </tbody>
           </table>
       );
@@ -176,6 +173,8 @@ function RelatedMajors(props){
 function TestResult(){
     const { seq } = useParams();
     const test_result_api = `https://inspct.career.go.kr/inspct/api/psycho/report?seq=${seq}`;
+    const {user, setUser} = useContext(UserContext);
+    const {answers, setAnswers} = useContext(AnswersContext);
 
     const [userInfo, setUserInfo] = useState({});
     const [Score, setScore] = useState();
@@ -186,9 +185,15 @@ function TestResult(){
 
     const [careersResult, setCareers] = useState();
     const [majorsResult, setMajors] = useState();
+
     const factors = ["능력발휘", "자율성", "보수", "안정성", "사회적 인정", "사회봉사", "자기계발", "창의성"];
     const careers = ['중졸이하','고졸','전문대졸','대졸','대학원졸'];
     const majors = ['계열무관','인문','사회','교육','공학','자연','의학','예체능'];
+
+    const clearAll = e => { 
+      setUser({name: '', gender:''});
+      setAnswers([]);
+    }
 
     //학력별 머시기 가져오는 함수
     const getJobs = useCallback(async()=>{
@@ -196,7 +201,6 @@ function TestResult(){
       const responseMajors = await axios.get(majors_api);
       setCareers(responseJobs.data);
       setMajors(responseMajors.data);
-      console.log(careersResult);
     },[maxScores]);
 
 
@@ -208,16 +212,16 @@ function TestResult(){
         setUserInfo({name: response.data.inspct.nm, gender: gender ,date: date.toLocaleDateString()});
 
         const wonScore = response.data.result.wonScore.trim().split(" ");
-        var formatScore = [];
+        let formatScore = [];
 
         for(var i = 0; i<factors.length; i++){
             formatScore.push(Number(wonScore[i].slice(-1)));
         }
         setScore(formatScore);
 
-        var firstMax = formatScore.indexOf(Math.max(...formatScore));
+        let firstMax = formatScore.indexOf(Math.max(...formatScore));
         formatScore[firstMax] = -1;
-        var secondMax = formatScore.indexOf(Math.max(...formatScore));
+        let secondMax = formatScore.indexOf(Math.max(...formatScore));
         setMaxScores([firstMax+1, secondMax+1]);
         //함수로 제일 큰 값을 구하고 싶은데 useMemo없이 그냥 함수로 정의해도 될까?
     },[test_result_api]);
@@ -240,16 +244,9 @@ function TestResult(){
         <h2>가치관과 관련이 높은 직업</h2>
         {careersResult? <RelatedJobs factors={careers} data={careersResult}/> : ""}
         {majorsResult? <RelatedMajors factors={majors} data={majorsResult}/> : ""}
-        {/* <RelatedJobs data={careersResult[0]}/> */}
+        <Link to="/"><button onClick={clearAll}>다시 검사하기</button></Link>
         </>
     );
 }
-
-
-
-
-
-//https://www.educative.io/edpresso/how-to-use-chartjs-to-create-charts-in-react
-//https://www.createwithdata.com/react-bar-chart
 
 export default TestResult;

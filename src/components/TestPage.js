@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import API_KEY from '../config';
-import {AnswerContext, UserContext} from '../context/Context';
+import {AnswersContext, UserContext} from '../context/Context';
 import { useHistory, Link } from "react-router-dom";
 
 function TestPage(){
     const {user, setUser} = useContext(UserContext);
-    const {answer, setAnswer} = useContext(AnswerContext);//답 여러개니까 answers로 바꿔주는게 좋음
+    const {answers, setAnswers} = useContext(AnswersContext);//답 여러개니까 answers로 바꿔주는게 좋음
 
     const [items, setItems] = useState([]);
     const [page, setPage] = useState();
@@ -19,8 +19,8 @@ function TestPage(){
             const response = await axios.get(`https://www.career.go.kr/inspct/openapi/test/questions?apikey=${API_KEY}&q=6`);
             const tests = response.data.RESULT;
             setItems(tests);
-            if (answer.length != response.data.RESULT.length){
-                setAnswer(new Array(response.data.RESULT.length));
+            if (answers.length != response.data.RESULT.length){
+                setAnswers(new Array(response.data.RESULT.length));
             }
             setPage(0);
         }
@@ -29,7 +29,7 @@ function TestPage(){
 
     useEffect(()=>{
         getPage();
-    }, [page, answer]);
+    }, [page, answers]);
 
     function getPage(){
         const cur = items.slice(page*5, page*5+5);
@@ -44,7 +44,7 @@ function TestPage(){
                                 name={"B"+item.qitemNo} 
                                 onChange={handleCheck(item.qitemNo)} 
                                 value={item.answerScore01} 
-                                checked = {answer[item.qitemNo-1] === item.answerScore01 } />
+                                checked = {answers[item.qitemNo-1] === item.answerScore01 } />
                             {item.answer01}
                         </label>
                         <label>
@@ -53,7 +53,7 @@ function TestPage(){
                                 name={"B"+item.qitemNo} 
                                 onChange={handleCheck(item.qitemNo)} 
                                 value={item.answerScore02} 
-                                checked = {answer[item.qitemNo-1] === item.answerScore02 }/>
+                                checked = {answers[item.qitemNo-1] === item.answerScore02 }/>
                             {item.answer02}
                         </label>
                     </div>
@@ -123,12 +123,12 @@ function TestPage(){
 
     const handleSubmit = e =>{
         e.preventDefault();
-        console.log(answer);
+        console.log(answers);
 
         var formatAnswers = "";
 
-        for(var i =0 ; i<answer.length; i++){
-            var formatEach = "B"+(i+1).toString()+"="+answer[i].toString()+" ";
+        for(var i =0 ; i<answers.length; i++){
+            var formatEach = "B"+(i+1).toString()+"="+answers[i].toString()+" ";
             formatAnswers+=formatEach;
         }
         console.log(formatAnswers);
@@ -137,7 +137,7 @@ function TestPage(){
     }
 
     const handleCheck = questionsNum => e =>{
-        setAnswer(state =>{
+        setAnswers(state =>{
             const newAnswers = [...state];
             newAnswers[questionsNum-1] = e.target.value;
             return newAnswers;
@@ -146,22 +146,55 @@ function TestPage(){
     }
 
 
-    const size = useMemo(()=>{
-        return answer.filter(function(value) { return value !== undefined }).length;
-    },[answer]) 
 
-    console.log(size);
+
+    const size = useMemo(()=>{
+        return answers.filter(function(value) { return value !== undefined }).length;
+    },[answers]) 
+
+    console.log(page);
 
     const nextB = (<input type = "button" value = "다음 >" onClick={handleRight} disabled={size >= 5*(page+1)? false: true}/> );
     const submB = (<input type = "button" value = "제출 >" onClick={handleSubmit} disabled={size === items.length? false: true}/>);
 
+    const handlePageChange = (e) =>{
+        e.preventDefault();
+        setPage(Number(e.target.id));
+    }
+
+    let allPages = [0]
+    for(var i =1 ; i<=Math.floor(size/5);i++){
+        if(i != Math.ceil(answers.length/5)+1){
+            allPages.push(i);
+        }
+    }
+    const linkStyle={
+        margin: "10px",
+        color: "black"
+    }
+    
+    const clickedStyle={
+        margin: "10px",
+        color: "red"
+    }
+    //이부분 나중에 css로 빼기..
+    
+    const pagination = allPages.map(
+        (eachPage)=>(
+            <a href="#" 
+                id={eachPage}
+                onClick={handlePageChange} 
+                key={eachPage} 
+                style={page == eachPage? linkStyle : clickedStyle}>{eachPage}</a>));
+
     return(
         <form className="container" >
-            <h2>검사 진행 {Math.ceil(size/answer.length*100)}%</h2>
-            <progress value={size} max={answer.length}></progress>
+            <h2>검사 진행 {size? Math.ceil(size/answers.length*100): 0}%</h2>
+            <progress value={size} max={answers.length}></progress>
             {thisP}
-            <div>
+            <div className ="pagination">
                 <input type = "button" value = "< 이전" onClick={handleLeft}/>
+                {pagination}
                 {page===5? submB : nextB}
             </div>
         </form>
