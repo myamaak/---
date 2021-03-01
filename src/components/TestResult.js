@@ -83,14 +83,13 @@ function RelatedJobs(props){
   //아 api 구조 너무 화가 난다..!
   let jobsTableContents = [];
 
-
   for (var i=0; i<props.factors.length; i++){
-    let eachRow = props.data.map(each=>{
-      return each[2]==i+1?
-       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`} 
+    let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
+      return index==i+1?
+       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
        style={{marginRight:"10px"}}
-       key={each[0]}>
-         {each[1]}
+       key={jobSeq}>
+         {jobTitle}
        </a>:""
       });
 
