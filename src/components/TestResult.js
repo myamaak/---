@@ -3,7 +3,15 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {Bar} from 'react-chartjs-2';
 import { AnswersContext, UserContext } from '../context/Context';
+import '../TestResult.css';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 function Intro(){
     return(
@@ -14,25 +22,56 @@ function Intro(){
     );
 }
 
+// function UserProfile(props){
+//     return(
+//         <table className="userProfile">
+//           <thead>
+//             <tr>
+//                 <th>이름</th>
+//                 <th>성별</th>
+//                 <th>검사일</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             <tr>
+//                 <td>{props.data.name}</td>
+//                 <td>{props.data.gender}</td>
+//                 <td>{props.data.date}</td>
+//             </tr>
+//           </tbody>
+//         </table>
+//     );
+// }
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 300,
+    margin: "auto",
+  },
+});
+
 function UserProfile(props){
-    return(
-        <table>
-          <thead>
-            <tr>
-                <th>이름</th>
-                <th>성별</th>
-                <th>검사일</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-                <td>{props.data.name}</td>
-                <td>{props.data.gender}</td>
-                <td>{props.data.date}</td>
-            </tr>
-          </tbody>
-        </table>
-    );
+  const classes = useStyles();
+  return(
+    <TableContainer>
+    <Table className={classes.table} aria-label="simple table" >
+      <TableHead>
+        <TableRow>
+          <TableCell> 이름 </TableCell>
+          <TableCell > 성별 </TableCell>
+          <TableCell > 날짜 </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody >
+        <TableRow >
+          <TableCell>{props.data.name}</TableCell>
+          <TableCell>{props.data.gender}</TableCell>
+          <TableCell>{props.data.date}</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </TableContainer>
+  );
 }
 
 class BarChart extends React.Component {
@@ -43,18 +82,39 @@ class BarChart extends React.Component {
           labels: this.props.label,
           datasets: [
             {
-              backgroundColor: 'rgba(75,192,192,1)',
-              borderColor: 'rgba(0,0,0,1)',
-              borderWidth: 2,
+              backgroundColor: [
+                'rgba(255, 154, 162, 0.5)',
+                'rgba(255, 183, 178, 0.5)',
+                'rgba(255, 218, 193, 0.5)',
+                'rgba(255, 206, 86, 0.3)',
+                'rgba(226, 240, 203, 0.6)',
+                'rgba(181, 234, 215, 0.5)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 154, 162, 1)',
+              'rgba(255, 183, 178, 1)',
+              'rgba(255, 218, 193, 1)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(226, 240, 203, 1)',
+              'rgba(181, 234, 215, 1)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)'
+            ],
+              borderWidth: 1,
               data: this.props.data
             }
           ]
         }
   
       return (
-        <div>
+        <div className ="chart-container">
           <Bar
+            id = "barChart"
             data={state}
+            width = {800}
+            height ={500}
             options={{
               title:{
                 display:true,
@@ -65,6 +125,8 @@ class BarChart extends React.Component {
                 display:false,
                 position:'right'
               },
+              responsive: false,
+              maintainAspectRatio: false,
               scales: {
                   yAxes: [{
                       ticks: {
@@ -102,6 +164,7 @@ function RelatedJobs(props){
   });
 
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
+  console.log(finalContents);
   
       return(
           <table>
