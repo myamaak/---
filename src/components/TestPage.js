@@ -154,8 +154,17 @@ function TestPage(){
 
     console.log(page);
 
-    const nextB = (<input type = "button" value = "다음 >" onClick={handleRight} disabled={size >= 5*(page+1)? false: true}/> );
-    const submB = (<input type = "button" value = "제출 >" onClick={handleSubmit} disabled={size === items.length? false: true}/>);
+    const nextB = (<input 
+                        type = "button" 
+                        value = "다음 >" 
+                        onClick={handleRight} 
+                        disabled={size >= 5*(page+1)? false: true}/> );
+
+    const submB = (<input 
+                        type = "button" 
+                        value = "제출 >" 
+                        onClick={handleSubmit} 
+                        disabled={size === items.length? false: true}/>);
 
     const handlePageChange = (e) =>{
         e.preventDefault();
@@ -195,7 +204,7 @@ function TestPage(){
             <div className ="pagination">
                 <input type = "button" value = "< 이전" onClick={handleLeft}/>
                 {pagination}
-                {page===5? submB : nextB}
+                {page + 1 === Math.ceil(answers.length/5)? submB : nextB}
             </div>
         </form>
     );
