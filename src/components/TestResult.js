@@ -5,13 +5,6 @@ import {Bar} from 'react-chartjs-2';
 import { AnswersContext, UserContext } from '../context/Context';
 import '../TestResult.css';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 function Intro(){
     return(
@@ -22,57 +15,52 @@ function Intro(){
     );
 }
 
-// function UserProfile(props){
-//     return(
-//         <table className="userProfile">
-//           <thead>
-//             <tr>
-//                 <th>이름</th>
-//                 <th>성별</th>
-//                 <th>검사일</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             <tr>
-//                 <td>{props.data.name}</td>
-//                 <td>{props.data.gender}</td>
-//                 <td>{props.data.date}</td>
-//             </tr>
-//           </tbody>
-//         </table>
-//     );
-// }
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 300,
-    margin: "auto",
-  },
-});
-
 function UserProfile(props){
-  const classes = useStyles();
-  return(
-    <TableContainer>
-    <Table className={classes.table} aria-label="simple table" >
-      <TableHead>
-        <TableRow>
-          <TableCell> 이름 </TableCell>
-          <TableCell > 성별 </TableCell>
-          <TableCell > 날짜 </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody >
-        <TableRow >
-          <TableCell>{props.data.name}</TableCell>
-          <TableCell>{props.data.gender}</TableCell>
-          <TableCell>{props.data.date}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </TableContainer>
-  );
+    return(
+        <table className="user-profile">
+          <thead>
+            <tr>
+                <th>이름</th>
+                <th>성별</th>
+                <th>검사일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>{props.data.name}</td>
+                <td>{props.data.gender}</td>
+                <td>{props.data.date}</td>
+            </tr>
+          </tbody>
+        </table>
+    );
 }
+
+
+
+// function UserProfile(props){
+//   const classes = useStyles();
+//   return(
+//     <TableContainer>
+//     <Table className={classes.table} aria-label="simple table" >
+//       <TableHead>
+//         <TableRow>
+//           <TableCell> 이름 </TableCell>
+//           <TableCell > 성별 </TableCell>
+//           <TableCell > 날짜 </TableCell>
+//         </TableRow>
+//       </TableHead>
+//       <TableBody >
+//         <TableRow >
+//           <TableCell>{props.data.name}</TableCell>
+//           <TableCell>{props.data.gender}</TableCell>
+//           <TableCell>{props.data.date}</TableCell>
+//         </TableRow>
+//       </TableBody>
+//     </Table>
+//   </TableContainer>
+//   );
+// }
 
 class BarChart extends React.Component {
 
@@ -301,11 +289,16 @@ function TestResult(){
     return(
         <>
         <Intro></Intro>
+        <br/>
         <UserProfile data={userInfo}></UserProfile>
+        <br/>
         <BarChart label={factors} data={Score}></BarChart>
+        <br/>
         <h2>가치관과 관련이 높은 직업</h2>
         {careersResult? <RelatedJobs factors={careers} data={careersResult}/> : ""}
+        <br/>
         {majorsResult? <RelatedMajors factors={majors} data={majorsResult}/> : ""}
+        <br/>
         <Link to="/"><button onClick={clearAll}>다시 검사하기</button></Link>
         </>
     );

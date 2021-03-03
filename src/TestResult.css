@@ -1,6 +1,12 @@
 #barChart{
     margin: auto;
 }
-.userProfile{
+.user-profile{
     margin: auto;
 }
+
+td, th {
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+  }

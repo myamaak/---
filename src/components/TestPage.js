@@ -3,6 +3,7 @@ import axios from 'axios';
 import API_KEY from '../config';
 import {AnswersContext, UserContext} from '../context/Context';
 import { useHistory, Link } from "react-router-dom";
+import './TestPage.css';
 
 function TestPage(){
     const {user, setUser} = useContext(UserContext);
@@ -31,14 +32,16 @@ function TestPage(){
         getPage();
     }, [page, answers]);
 
+    // https://stackoverflow.com/questions/2011142/how-to-change-the-style-of-the-title-attribute-inside-an-anchor-tag
+    //title attribute design
     function getPage(){
         const cur = items.slice(page*5, page*5+5);
         const qPage = cur.map(
             (item)=>(
-                <div key ={item.qitemNo}>
-                    <p>{item.qitemNo} {item.question}</p>
+                <div key ={item.qitemNo} className="item-box">
+                    <p>{item.qitemNo}. {item.question}</p>
                     <div className='radio'>
-                        <label>
+                        <label title={item.answer03}>
                             <input 
                                 type='radio' 
                                 name={"B"+item.qitemNo} 
@@ -47,7 +50,7 @@ function TestPage(){
                                 checked = {answers[item.qitemNo-1] === item.answerScore01 } />
                             {item.answer01}
                         </label>
-                        <label>
+                        <label title={item.answer04}>
                             <input 
                                 type='radio' 
                                 name={"B"+item.qitemNo} 
@@ -67,6 +70,7 @@ function TestPage(){
     }
 
     const handleLeft = e =>{
+        e.preventDefault();
         if(page>0){
             setPage(page-1);
         }else{
@@ -75,6 +79,7 @@ function TestPage(){
     }
 
     const handleRight = e =>{
+        e.preventDefault();
         setPage(page+1);
         // if(page<5){
         //     setPage(page+1);
@@ -146,25 +151,25 @@ function TestPage(){
     }
 
 
-
-
     const size = useMemo(()=>{
         return answers.filter(function(value) { return value !== undefined }).length;
     },[answers]) 
 
     console.log(page);
 
-    const nextB = (<input 
-                        type = "button" 
-                        value = "다음 >" 
+    const nextB = (<button 
+                        className = {size >= 5*(page+1)? "button-right":"button-disabled"}
                         onClick={handleRight} 
-                        disabled={size >= 5*(page+1)? false: true}/> );
+                        disabled={size >= 5*(page+1)? false: true}>
+                        <span>다음</span>
+                    </button> );
 
-    const submB = (<input 
-                        type = "button" 
-                        value = "제출 >" 
+    const submB = (<button
+                        className = {size === items.length? "button-right":"button-disabled"}
                         onClick={handleSubmit} 
-                        disabled={size === items.length? false: true}/>);
+                        disabled={size === items.length? false: true}>
+                         <span>제출</span>   
+                        </button>);
 
     const handlePageChange = (e) =>{
         e.preventDefault();
@@ -177,24 +182,19 @@ function TestPage(){
             allPages.push(i);
         }
     }
-    const linkStyle={
-        margin: "10px",
-        color: "black"
-    }
-    
-    const clickedStyle={
-        margin: "10px",
-        color: "red"
-    }
+
     //이부분 나중에 css로 빼기..
     
     const pagination = allPages.map(
         (eachPage)=>(
             <a href="#" 
-                id={eachPage}
+                // id={eachPage}
                 onClick={handlePageChange} 
-                key={eachPage} 
-                style={page == eachPage? linkStyle : clickedStyle}>{eachPage}</a>));
+                key={eachPage}
+                className={page == eachPage? "clicked-style" : "link-style"}>
+                <span id={eachPage} className={page == eachPage? "clicked-dot" : "link-dot"}></span>
+            {/* {eachPage} */}
+            </a>));
 
     return(
         <form className="container" >
@@ -202,8 +202,12 @@ function TestPage(){
             <progress value={size} max={answers.length}></progress>
             {thisP}
             <div className ="pagination">
-                <input type = "button" value = "< 이전" onClick={handleLeft}/>
+                <button onClick={handleLeft} className="button-left">
+                <span>이전</span>
+                </button>
+
                 {pagination}
+
                 {page + 1 === Math.ceil(answers.length/5)? submB : nextB}
             </div>
         </form>

@@ -9,9 +9,9 @@ import TestFinish from './components/TestFinish';
 import TestResult from './components/TestResult';
 import {UserContext , ExContext, AnswersContext} from './context/Context';
 
-// todo
-// 이름을 올바르게 입력하지 않았을 경우, 이에 대한 안내 메세지를 출력합니다. => onChange 혹은 onBlur 사용
-// 성별을 선택하지 않았을 경우, 이에 대한 안내 메세지를 출력합니다.
+//antdesign 부트스트렙같은거! 근데 리액트에 더 최적화 되어있다
+//fluentui
+//styled component 많이 쓰인다!!!
 
 //참고사항
 // event 관련 함수에서 useCallback 사용하기 -> 사용하지 않으면 변수가 변경되었을때 잘 적용되지 않을 수도 있다.

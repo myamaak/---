@@ -1,0 +1,144 @@
+.item-box{
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.button-right {
+    border-radius: 4px;
+    background-color:#00f9ff;
+    border: none;
+    color:rgba(33, 33, 42, 1);
+    text-align: center;
+    font-family: 'Cafe24Oneprettynight';
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px;
+    width: 60px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button-disabled {
+    border-radius: 4px;
+    background-color:#00fbff56;
+    border: none;
+    color:rgba(33, 33, 42, 0.514);
+    text-align: center;
+    font-family: 'Cafe24Oneprettynight';
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px;
+    width: 60px;
+    margin: 5px;
+  }
+  
+  .button-right span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  
+  .button-right span:after {
+    content: '>>';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -5px;
+    transition: 0.5s;
+  }
+  
+  .button-right:hover span {
+    padding-right: 15px;
+  }
+  
+  .button-right:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+  .button-left {
+    border-radius: 4px;
+    background-color:#00f9ff;
+    border: none;
+    color:rgba(33, 33, 42, 1);
+    text-align: center;
+    font-family: 'Cafe24Oneprettynight';
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px;
+    width: 60px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button-left span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  
+  .button-left span:after {
+    content: '<<';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: -5px;
+    transition: 0.5s;
+  }
+  
+  .button-left:hover span {
+    padding-left: 15px;
+  }
+  
+  .button-left:hover span:after {
+    opacity: 1;
+    left: 0;
+  }
+  
+.clicked-style {
+    margin: 10px;
+    cursor: default;
+}
+
+.link-style{
+    margin: 10px;
+}
+
+.clicked-dot{
+    height: 5px;
+    width: 5px;
+    background-color: #00f9ff;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: #00f9ff;
+    border-style: solid;
+    display: inline-block;
+}
+
+.link-dot{
+    height: 5px;
+    width: 5px;
+    border-color: #00f9ff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    display: inline-block;
+
+}
+
+.link-dot:hover{
+    transition: .3s;
+    border-color: lighten(#1BA39C, 70%);
+    background: lighten(#1BA39C, 70%);
+}
+
