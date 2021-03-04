@@ -1,0 +1,120 @@
+.input-group {
+  font-size: 13px;
+  line-height: 20px;
+  margin: auto;
+  width: 200px;
+}
+
+label {
+
+  margin-bottom: 2px;
+}
+
+input[type=text] {
+  background: #fff;
+  border: 1px solid #999;
+
+  font-size: 13px;
+  height: 33px;
+  margin: 0;
+  padding: 0 0 0 15px;
+  width: 100%;
+}
+
+.error-message {
+  color: #ff073a;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 5px 0 0;
+}
+
+.input-group .error-message {
+  display: none;
+}
+
+
+/* Error Styling */
+
+.error label {
+  color: #ff073a;
+}
+
+.error input[type=text] {
+  background-color: #fce4e4;
+  border: 1px solid #ff073a;
+  outline: none;
+}
+/* .error .gender{
+  border: 1px solid #ff073a;
+  border-radius: 100%;
+} */
+
+.error .error-message {
+  display: inline-block;
+}
+
+
+
+@font-face {
+  font-family: 'Cafe24Oneprettynight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.button {
+  border-radius: 4px;
+  background-color:#00f9ff;
+  border: none;
+  color:rgba(33, 33, 42, 1);
+  text-align: center;
+  font-family: 'Cafe24Oneprettynight';
+  font-weight: bold;
+  font-size: 13px;
+  padding: 10px;
+  width: 100px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button-disabled {
+  border-radius: 4px;
+  background-color:#00fbff56;
+  border: none;
+  color:rgba(33, 33, 42, 0.514);
+  text-align: center;
+  font-family: 'Cafe24Oneprettynight';
+  font-weight: bold;
+  font-size: 13px;
+  padding: 10px;
+  width: 100px;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+
+.button span:after {
+  content: '>>';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -5px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 15px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
