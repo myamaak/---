@@ -63,7 +63,7 @@ input[type=text] {
   font-style: normal;
 }
 
-.button {
+.start-button {
   border-radius: 4px;
   background-color:#00f9ff;
   border: none;
@@ -79,7 +79,7 @@ input[type=text] {
   margin: 5px;
 }
 
-.button-disabled {
+.start-button-disabled {
   border-radius: 4px;
   background-color:#00fbff56;
   border: none;
@@ -93,7 +93,7 @@ input[type=text] {
   margin: 5px;
 }
 
-.button span {
+.start-button span {
   cursor: pointer;
   display: inline-block;
   position: relative;
@@ -101,7 +101,7 @@ input[type=text] {
 }
 
 
-.button span:after {
+.start-button span:after {
   content: '>>';
   position: absolute;
   opacity: 0;
@@ -110,11 +110,11 @@ input[type=text] {
   transition: 0.5s;
 }
 
-.button:hover span {
+.start-button:hover span {
   padding-right: 15px;
 }
 
-.button:hover span:after {
+.start-button:hover span:after {
   opacity: 1;
   right: 0;
 }

@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useContext,useCallback } from 'react';
+import React, { useState, useEffect, useContext,useCallback, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import {Bar} from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import { AnswersContext, UserContext } from '../context/Context';
 import '../TestResult.css';
+import API_KEY from '../config';
 
 
 function Intro(){
     return(
-        <div>
+        <div className="intro">
             <h2>직업가치관검사 결과표</h2>
             <p>직업가치관이란 직업을 선택할 때 영향을 끼치는 자신만의 믿음과 신념입니다. 따라서 여러분의 직업생활과 관련하여 포기하지 않는 무게중심의 역할을 한다고 볼 수 있습니다. 직업가치관검사는 여러분이 직업을 선택할 때 상대적으로 어떠한 가치를 중요하게 생각하는지를 알려줍니다. 또한 본인이 가장 중요하게 생각하는 가치를 충족시켜줄 수 있는 직업에 대해 생각해 볼 기회를 제공합니다.</p>
         </div>
@@ -107,7 +108,8 @@ class BarChart extends React.Component {
               title:{
                 display:true,
                 text:'직업가치관결과',
-                fontSize:20
+                fontSize:20,
+                fontColor:"white"
               },
               legend:{
                 display:false,
@@ -119,8 +121,14 @@ class BarChart extends React.Component {
                   yAxes: [{
                       ticks: {
                           beginAtZero:true,
+                          fontColor: "white"
                       }
-                    }]
+                    }],
+                  xAxes: [{
+                    ticks: {
+                        fontColor: "white",
+                    }
+                }]
                  }
             }}
           />
@@ -136,11 +144,21 @@ function RelatedJobs(props){
   for (var i=0; i<props.factors.length; i++){
     let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
       return index==i+1?
-       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
-       style={{marginRight:"10px"}}
-       key={jobSeq}>
-         {jobTitle}
-       </a>:""
+      //  <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
+      //  style={{marginRight:"10px"}}
+      //  key={jobSeq}>
+      //    {jobTitle}
+      //  </a>:""
+      <button 
+        href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
+        style={{marginRight:"10px"}}
+        key={jobSeq}
+        value={jobSeq}
+        type="button"
+        onClick={(e)=>{props.do(e)}}
+        className="nostyle-button">
+        {jobTitle}
+      </button>:""
       });
 
     eachRow = eachRow.filter(function(element){ return element != "";});
@@ -155,7 +173,7 @@ function RelatedJobs(props){
   console.log(finalContents);
   
       return(
-          <table>
+          <table className="jobs-table">
             <caption>종사자 평균 학력별</caption>
             <thead>
               <tr>
@@ -184,7 +202,9 @@ function RelatedMajors(props){
       return each[2]==i+1?
        <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`} 
        style={{marginRight:"10px"}}
-       key={each[0]}>
+       key={each[0]}
+       target="_blank"
+       >
          {each[1]}
        </a>:""
       });
@@ -199,7 +219,7 @@ function RelatedMajors(props){
 
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
       return(
-          <table>
+          <table className="jobs-table">
             <caption>종사자 평균 전공별</caption>
             <thead>
               <tr>
@@ -220,6 +240,66 @@ function RelatedMajors(props){
       );
 }
 
+function ClickedJob(props){
+
+  const chartColors = ['#009fff', '#00c5ff','#00dfff','#00ffdf','#7dfffc','#cbfffe','#a0edff'];
+  const jobPossibility = props.data.job_possibility[0].chart_item_list;
+  let labelData = [];
+  let jobPossibilityData =[];
+  for(var i = 0 ; i <jobPossibility.length; i++){
+    labelData.push(jobPossibility[i].chart_key);
+    jobPossibilityData.push(jobPossibility[i].chart_value);
+  }
+  console.log(labelData);
+  
+  const options={
+    legend: {
+      display: true,
+      position: "right",
+      labels:{
+        fontColor:"white"
+      }
+    },
+    elements: {
+      arc: {
+        borderWidth: 0
+      }
+    }
+  }
+
+  const doughnutData={
+    maintainAspectRatio: false,
+    responsive: false,
+    labels: labelData,
+    datasets: [
+      {
+        data: jobPossibilityData,
+        backgroundColor: chartColors,
+        hoverBackgroundColor: chartColors
+      }
+    ]
+  }
+  return(
+  <div className="jobdata-container">
+    <h3>{props.data.job}</h3>
+    <div className="doughnut-container">
+      <Doughnut data={doughnutData} options={options}></Doughnut>
+    </div>
+    <div className="detail">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <a 
+      href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${props.jobSeq}`} 
+      target="_blank">
+      상세정보 
+    </a>
+  </div>
+  );
+}
+
 function TestResult(){
     const { seq } = useParams();
     const test_result_api = `https://inspct.career.go.kr/inspct/api/psycho/report?seq=${seq}`;
@@ -229,9 +309,26 @@ function TestResult(){
     const [userInfo, setUserInfo] = useState({});
     const [Score, setScore] = useState();
     const [maxScores, setMaxScores] = useState([-1,-1]);
+    const [job ,setJob] = useState();
+    const [jobData, setJobData] = useState();
 
-    const jobs_api = `https://inspct.career.go.kr/inspct/api/psycho/value/jobs?no1=${maxScores[0]}&no2=${maxScores[1]}`;
-    const majors_api = `https://inspct.career.go.kr/inspct/api/psycho/value/majors?no1=${maxScores[0]}&no2=${maxScores[1]}`;
+    const jobs_api = useMemo(()=>{
+      return `https://inspct.career.go.kr/inspct/api/psycho/value/jobs?no1=${maxScores[0]}&no2=${maxScores[1]}`;
+    },[maxScores]);
+
+    const majors_api = useMemo(()=>{
+      return `https://inspct.career.go.kr/inspct/api/psycho/value/majors?no1=${maxScores[0]}&no2=${maxScores[1]}`;
+    },[maxScores]);
+    // useMemo없이 동기적으로 api주소를 지정하는 코드를 짜면 맨 처음에 maxScores값이 -1인 채로 들어가고,
+    // maxScores값이 바뀐다고 해도 바뀐 값을 반영해서 변수를 재선언해주지 않는다.
+    // 따라서 useMemo를 사용해서 jobs api와 majors api를 선언해주면 좋다.
+
+
+    const clickJob = e =>{
+      setJob(e.target.value);
+    }
+
+    const jobs_data_api = "https://www.career.go.kr/cnet/openapi/getOpenApi.json";
 
     const [careersResult, setCareers] = useState();
     const [majorsResult, setMajors] = useState();
@@ -252,7 +349,6 @@ function TestResult(){
       setCareers(responseJobs.data);
       setMajors(responseMajors.data);
     },[maxScores]);
-
 
     const getTestResult = useCallback(async()=>{
         const response = await axios.get(test_result_api);
@@ -276,6 +372,21 @@ function TestResult(){
         //함수로 제일 큰 값을 구하고 싶은데 useMemo없이 그냥 함수로 정의해도 될까?
     },[test_result_api]);
 
+    const getJobsData = useCallback(async()=>{
+      let request = {
+        params: {
+          "apiKey": API_KEY,
+          "svcType": "api",
+          "svcCode":"JOB_VIEW",
+          "contentType":"json",
+          "gubun": "job_apti_list",
+          "jobdicSeq": job
+        }
+      }
+      const response = await axios.get(jobs_data_api, request);
+      setJobData(response.data.dataSearch.content[0]);
+    },[job]);
+
     useEffect(()=>{
       getTestResult();
     },[]);
@@ -284,7 +395,13 @@ function TestResult(){
       getJobs();
     },[maxScores]);
 
-    console.log(maxScores);
+    useEffect(()=>{
+      if(job){
+        getJobsData();
+      }
+    },[job]);
+
+    console.log(jobData);
 
     return(
         <>
@@ -294,10 +411,15 @@ function TestResult(){
         <br/>
         <BarChart label={factors} data={Score}></BarChart>
         <br/>
+        <hr/>
         <h2>가치관과 관련이 높은 직업</h2>
-        {careersResult? <RelatedJobs factors={careers} data={careersResult}/> : ""}
         <br/>
-        {majorsResult? <RelatedMajors factors={majors} data={majorsResult}/> : ""}
+        {jobData? <ClickedJob data={jobData} jobSeq={job}/>:""}
+        <br/>
+        {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob}/> : ""}
+        <br/>
+        <br/>
+        {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob}/> : ""}
         <br/>
         <Link to="/"><button onClick={clearAll}>다시 검사하기</button></Link>
         </>

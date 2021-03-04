@@ -3,6 +3,7 @@ import axios from 'axios';
 import API_KEY from '../config';
 import { Link } from 'react-router-dom';
 import {ExContext} from '../context/Context';
+import './TestPage.css';
 
 //컴포넌트 분리하고 싶은데 hook 관리가 너무 어려움...
 
@@ -41,17 +42,27 @@ function Example(){
             <h2>검사 예시</h2>
             <h3>0%</h3>
             <progress value="0" max="100"></progress>
-            <p>{item.question}</p>
-            <div className='radio'>
-                <label>
-                    <input type='radio' name='answer' onChange={handleCheck} value={item.score[0]} checked={check === item.score[0]}/>{item.answer[0]}
-                </label>
-                <label>
-                    <input type='radio' name='answer' onChange={handleCheck} value={item.score[1]} checked={check === item.score[1]}/>{item.answer[1]}
-                </label>
+            <div className="item-box">
+                <p>{item.question}</p>
+                <div className='radio'>
+                    <label>
+                        <input type='radio' name='answer' onChange={handleCheck} value={item.score[0]} checked={check === item.score[0]}/>{item.answer[0]}
+                    </label>
+                    <label>
+                        <input type='radio' name='answer' onChange={handleCheck} value={item.score[1]} checked={check === item.score[1]}/>{item.answer[1]}
+                    </label>
+                </div>
             </div>
-            <Link to = '/'><input type="button" value="이전" ></input></Link>
-            <Link to = '/test'><input type="button" value="검사 시작" disabled={check ? false: true}></input></Link>
+            <Link to = '/'>
+                <button type="button" className="button-left" style={{width: "90px"}} type="button">
+                    <span>이전</span>
+                </button>
+            </Link>
+            <Link to = '/test'>
+                <button className={check ? "start-button": "start-button-disabled"} style={{width: "90px"}}type="button" disabled={check ? false: true}>
+                    <span>검사 시작</span>
+                </button>
+            </Link>
         </div>
     );
 }
