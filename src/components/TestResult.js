@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useContext,useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useContext,useCallback, useMemo, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import { Helmet } from 'react-helmet'
 import { AnswersContext, UserContext } from '../context/Context';
-import '../TestResult.css';
+import KakaoShareButton from './KaKaoShare';
+import './TestResult.css';
 import API_KEY from '../config';
 
 
@@ -71,27 +73,9 @@ class BarChart extends React.Component {
           labels: this.props.label,
           datasets: [
             {
-              backgroundColor: [
-                'rgba(255, 154, 162, 0.5)',
-                'rgba(255, 183, 178, 0.5)',
-                'rgba(255, 218, 193, 0.5)',
-                'rgba(255, 206, 86, 0.3)',
-                'rgba(226, 240, 203, 0.6)',
-                'rgba(181, 234, 215, 0.5)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 154, 162, 1)',
-              'rgba(255, 183, 178, 1)',
-              'rgba(255, 218, 193, 1)',
-              'rgba(255, 206, 86, 0.6)',
-              'rgba(226, 240, 203, 1)',
-              'rgba(181, 234, 215, 1)',
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(153, 102, 255, 0.6)'
-            ],
-              borderWidth: 1,
+              backgroundColor: ['#015095', '#006caa','#0184ba','#0199c6','#3cb1d4','#72c6e0','#c5e1e4', '#def1f6'],
+              borderColor: ['#001e39','#015095', '#006caa','#0184ba','#0199c6','#3cb1d4','#72c6e0','#c5e1e4'],
+              borderWidth: 1.5,
               data: this.props.data
             }
           ]
@@ -150,7 +134,6 @@ function RelatedJobs(props){
       //    {jobTitle}
       //  </a>:""
       <button 
-        href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
         style={{marginRight:"10px"}}
         key={jobSeq}
         value={jobSeq}
@@ -174,7 +157,7 @@ function RelatedJobs(props){
   
       return(
           <table className="jobs-table">
-            <caption>종사자 평균 학력별</caption>
+            <caption className="title">종사자 평균 학력별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -197,16 +180,18 @@ function RelatedJobs(props){
 function RelatedMajors(props){
   let jobsTableContents = [];
 
+  console.log(props.data);
   for (var i=0; i<props.factors.length; i++){
-    let eachRow = props.data.map(each=>{
-      return each[2]==i+1?
-       <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${each[0]}`} 
-       style={{marginRight:"10px"}}
-       key={each[0]}
-       target="_blank"
-       >
-         {each[1]}
-       </a>:""
+    let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
+      return index==i?
+        <button 
+          key={jobSeq}
+          value={jobSeq}
+          type="button"
+          onClick={(e)=>{props.do(e)}}
+          className="nostyle-button">
+          {jobTitle}
+        </button>:""
       });
 
     eachRow = eachRow.filter(function(element){ return element != "";});
@@ -220,7 +205,7 @@ function RelatedMajors(props){
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
       return(
           <table className="jobs-table">
-            <caption>종사자 평균 전공별</caption>
+            <caption className="title">종사자 평균 전공별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -242,7 +227,12 @@ function RelatedMajors(props){
 
 function ClickedJob(props){
 
-  const chartColors = ['#009fff', '#00c5ff','#00dfff','#00ffdf','#7dfffc','#cbfffe','#a0edff'];
+    //loading문제 해결
+    //state로 isloading 만약 로딩중이면 로딩중 띄워주기 -> loading shimmer
+    //axios cancel 찾아보기
+
+
+  const chartColors = ['#015095', '#006caa','#0184ba','#0199c6','#3cb1d4','#72c6e0','#addde9'];
   const jobPossibility = props.data.job_possibility[0].chart_item_list;
   let labelData = [];
   let jobPossibilityData =[];
@@ -250,7 +240,22 @@ function ClickedJob(props){
     labelData.push(jobPossibility[i].chart_key);
     jobPossibilityData.push(jobPossibility[i].chart_value);
   }
-  console.log(labelData);
+
+  const major = props.data.capacity_major[1].major;
+  let majorData = [];
+  for(var i = 0; i<major.length ; i++){
+    majorData.push([major[i].MAJOR_NM, major[i].MAJOR_SEQ])
+  }
+  console.log(majorData);
+  const relatedMajorsComponent =  majorData.map(([majorTitle, majorSeq])=>(
+    <a 
+      href={`http://www.career.go.kr/cnet/front/base/major/FunivMajorView.do?SEQ=${majorSeq}`} 
+      className="nostyle-link" 
+      key={majorSeq}
+      target="_blank">
+        {majorTitle}
+    </a>
+  ));
   
   const options={
     legend: {
@@ -283,22 +288,59 @@ function ClickedJob(props){
   <div className="jobdata-container">
     <h3>{props.data.job}</h3>
     <div className="doughnut-container">
-      <Doughnut data={doughnutData} options={options}></Doughnut>
+      {jobPossibilityData.length>0?<Doughnut data={doughnutData} options={options}></Doughnut>:""}
     </div>
-    <div className="detail">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <table className="detail">
+      <tr>
+        <td>{props.data.similarJob?"유사한 직업":""}</td>
+        <td>{props.data.similarJob}</td>
+      </tr>
+      <tr>
+        <td>{relatedMajorsComponent?"관련 전공":""}</td>
+        <td>{relatedMajorsComponent}</td>
+      </tr>
+      <tr>
+        <td>{props.data.ability?"핵심 능력":""}</td>
+        <td>{props.data.ability}</td>
+      </tr>
+    </table>
+    <br/>
+    <div className="see-more">
+      * 더 많은 정보를 원하신다면
+      <a 
+        className="nostyle-link" 
+        href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${props.jobSeq}`} 
+        target="_blank">
+        상세정보 
+      </a>로 이동해주세요.
     </div>
-    <a 
-      href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${props.jobSeq}`} 
-      target="_blank">
-      상세정보 
-    </a>
   </div>
   );
 }
+
+
+function Loading(props){
+  let shimmer;
+  if( props.loading === 1){
+    shimmer = 
+    (<div class="card br">
+      <div class="wrapper">
+        <div class="doughnut animate">
+          <div class="middle"></div>
+        </div>
+        <div class="comment br animate"></div>
+        <div class="comment br animate"></div>
+        <div class="comment br animate"></div>
+      </div>
+      </div>
+      );
+  }else{
+    shimmer = "";
+  }
+  return shimmer;
+
+}
+
 
 function TestResult(){
     const { seq } = useParams();
@@ -311,6 +353,8 @@ function TestResult(){
     const [maxScores, setMaxScores] = useState([-1,-1]);
     const [job ,setJob] = useState();
     const [jobData, setJobData] = useState();
+    const [isLoading, setIsLoading] = useState(-1);
+    const jobInfoComponent = useRef();
 
     const jobs_api = useMemo(()=>{
       return `https://inspct.career.go.kr/inspct/api/psycho/value/jobs?no1=${maxScores[0]}&no2=${maxScores[1]}`;
@@ -326,7 +370,15 @@ function TestResult(){
 
     const clickJob = e =>{
       setJob(e.target.value);
+      window.scrollTo({
+        behavior: "smooth",
+        left: 0,
+        top: jobInfoComponent.current.offsetTop
+      })
+
     }
+
+    console.log(jobInfoComponent);
 
     const jobs_data_api = "https://www.career.go.kr/cnet/openapi/getOpenApi.json";
 
@@ -369,10 +421,12 @@ function TestResult(){
         formatScore[firstMax] = -1;
         let secondMax = formatScore.indexOf(Math.max(...formatScore));
         setMaxScores([firstMax+1, secondMax+1]);
-        //함수로 제일 큰 값을 구하고 싶은데 useMemo없이 그냥 함수로 정의해도 될까?
+
     },[test_result_api]);
 
+
     const getJobsData = useCallback(async()=>{
+
       let request = {
         params: {
           "apiKey": API_KEY,
@@ -384,7 +438,9 @@ function TestResult(){
         }
       }
       const response = await axios.get(jobs_data_api, request);
+      
       setJobData(response.data.dataSearch.content[0]);
+      setIsLoading(0);
     },[job]);
 
     useEffect(()=>{
@@ -397,11 +453,13 @@ function TestResult(){
 
     useEffect(()=>{
       if(job){
+        setIsLoading(1);
+        
         getJobsData();
       }
     },[job]);
 
-    console.log(jobData);
+    console.log(isLoading);
 
     return(
         <>
@@ -411,17 +469,26 @@ function TestResult(){
         <br/>
         <BarChart label={factors} data={Score}></BarChart>
         <br/>
-        <hr/>
-        <h2>가치관과 관련이 높은 직업</h2>
-        <br/>
-        {jobData? <ClickedJob data={jobData} jobSeq={job}/>:""}
-        <br/>
-        {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob}/> : ""}
-        <br/>
-        <br/>
-        {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob}/> : ""}
-        <br/>
-        <Link to="/"><button onClick={clearAll}>다시 검사하기</button></Link>
+
+        <div className="container-bottom">
+          <div className="top-border"></div>
+          <h2 ref={jobInfoComponent}>가치관과 관련이 높은 직업</h2>
+          <br/>
+          {isLoading === 0 && jobData? <ClickedJob data={jobData} jobSeq={job}/>:<Loading loading={isLoading}/>}
+          <br/>
+          {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob}/> : ""}
+          <br/>
+          {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob}/> : ""}
+          <br/>
+          <div className="sharebutton">
+            <Helmet>
+              <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+            </Helmet>
+            <KakaoShareButton/>
+          </div>
+          <br/>
+          <Link to="/"><button className="glow-button" onClick={clearAll}>다시 검사하기</button></Link>
+        </div>
         </>
     );
 }
