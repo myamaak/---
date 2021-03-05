@@ -23,7 +23,7 @@
     margin: 5px;
   }
   
-  .button-disabled {
+.button-disabled {
     border-radius: 4px;
     background-color:#00fbff56;
     border: none;
@@ -32,38 +32,38 @@
     font-family: 'Cafe24Oneprettynight';
     font-weight: bold;
     font-size: 13px;
-    padding: 10px;
     width: 60px;
+    padding: 10px;
     margin: 5px;
   }
   
-  .button-right span {
+.button-right span {
     cursor: pointer;
     display: inline-block;
     position: relative;
     transition: 0.5s;
-  }
-  
-  
-  .button-right span:after {
+}
+
+
+.button-right span:after {
     content: '>>';
     position: absolute;
     opacity: 0;
     top: 0;
     right: -5px;
     transition: 0.5s;
-  }
-  
-  .button-right:hover span {
+}
+
+.button-right:hover span {
     padding-right: 15px;
-  }
-  
-  .button-right:hover span:after {
+}
+
+.button-right:hover span:after {
     opacity: 1;
     right: 0;
-  }
-  
-  .button-left {
+}
+
+.button-left {
     border-radius: 4px;
     background-color:#00f9ff;
     border: none;
@@ -77,33 +77,33 @@
     transition: all 0.5s;
     cursor: pointer;
     margin: 5px;
-  }
-  
-  .button-left span {
+}
+
+.button-left span {
     cursor: pointer;
     display: inline-block;
     position: relative;
     transition: 0.5s;
-  }
-  
-  
-  .button-left span:after {
+}
+
+
+.button-left span:after {
     content: '<<';
     position: absolute;
     opacity: 0;
     top: 0;
     left: -5px;
     transition: 0.5s;
-  }
-  
-  .button-left:hover span {
+}
+
+.button-left:hover span {
     padding-left: 15px;
-  }
-  
-  .button-left:hover span:after {
-    opacity: 1;
-    left: 0;
-  }
+}
+
+.button-left:hover span:after {
+opacity: 1;
+left: 0;
+}
   
 .clicked-style {
     margin: 10px;

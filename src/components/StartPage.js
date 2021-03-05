@@ -69,7 +69,7 @@ function StartPage(){
             to ={user.name === '' || user.gender ==='' ? '#' : '/example'}>
             <button 
               type="Submit" 
-              className={user.name === '' || user.gender ==='' ? "button-disabled" : "button"}
+              className={user.name === '' || user.gender ==='' ? "start-button-disabled" : "start-button"}
               disabled={user.name === '' || user.gender ==='' ? true : false}>
               <span>
                 검사 시작 
