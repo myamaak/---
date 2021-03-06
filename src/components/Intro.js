@@ -1,5 +1,26 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./intro.css";
+
+// const [fadeOut, setFadeOut] = useState(false);
+
+// var reSetTimeOut = window.setTimeout(setFadeOut(true), 3000);
+
+// useEffect(()=>{
+//     if(fadeOut){
+
+//     }
+//     }
+//     ,[fadeOut]);
+
+
+// function Slider(){
+//     return(
+//         <div className="slider-container">
+
+//         </div>
+//     );
+// }
 
 function Intro(){
 
