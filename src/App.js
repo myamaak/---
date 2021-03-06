@@ -7,6 +7,8 @@ import Example from './components/Example';
 import TestPage from './components/TestPage';
 import TestFinish from './components/TestFinish';
 import TestResult from './components/TestResult';
+import RecruitInfo from './components/RecuitInfo';
+import Intro from './components/Intro';
 import {UserContext , ExContext, AnswersContext} from './context/Context';
 
 //antdesign 부트스트렙같은거! 근데 리액트에 더 최적화 되어있다
@@ -37,7 +39,10 @@ import {UserContext , ExContext, AnswersContext} from './context/Context';
 //무언가 임포트 필요한걸  썼을때 편하게 임포트 하려면 단어 위에 커서 올리고 ctrl + space 하면 선택지가 주어지는데 고르고 엔터 누르면 
 //직접 타이핑 할 필요 없이 자동으로 import가 된다
 //react hook form으로 form의 정보를 효율적으로 받아올 수 있다. -> setState로 값이 변경될때마다 컴포넌트를 새로 그리는 것을 막을 수 있다!!!
+//optional chaining!
 
+
+//https://oapi.saramin.co.kr/
 function App() {
   const [user, setUser] = useState({name: '', gender:''});
   const userValue = {user, setUser};
@@ -52,6 +57,12 @@ function App() {
     <main>
     <Switch>
       <Route path='/' exact>
+          <div>
+            <Intro/>
+          </div>
+      </Route>
+      
+      <Route path='/intro' exact>
         <UserContext.Provider value={userValue}>
           <div>
             <StartPage/>
@@ -99,6 +110,12 @@ function App() {
           </div>
           </AnswersContext.Provider>
         </UserContext.Provider>
+      </Route>
+
+      <Route path='/recruit/:seq/:job'>
+          <div>
+            <RecruitInfo/>
+          </div>
       </Route>
 
     </Switch>

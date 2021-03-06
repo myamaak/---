@@ -40,31 +40,6 @@ function UserProfile(props){
 }
 
 
-
-// function UserProfile(props){
-//   const classes = useStyles();
-//   return(
-//     <TableContainer>
-//     <Table className={classes.table} aria-label="simple table" >
-//       <TableHead>
-//         <TableRow>
-//           <TableCell> 이름 </TableCell>
-//           <TableCell > 성별 </TableCell>
-//           <TableCell > 날짜 </TableCell>
-//         </TableRow>
-//       </TableHead>
-//       <TableBody >
-//         <TableRow >
-//           <TableCell>{props.data.name}</TableCell>
-//           <TableCell>{props.data.gender}</TableCell>
-//           <TableCell>{props.data.date}</TableCell>
-//         </TableRow>
-//       </TableBody>
-//     </Table>
-//   </TableContainer>
-//   );
-// }
-
 class BarChart extends React.Component {
 
     render() {
@@ -128,11 +103,6 @@ function RelatedJobs(props){
   for (var i=0; i<props.factors.length; i++){
     let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
       return index==i+1?
-      //  <a href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${jobSeq}`} 
-      //  style={{marginRight:"10px"}}
-      //  key={jobSeq}>
-      //    {jobTitle}
-      //  </a>:""
       <button 
         style={{marginRight:"10px"}}
         key={jobSeq}
@@ -157,7 +127,7 @@ function RelatedJobs(props){
   
       return(
           <table className="jobs-table">
-            <caption className="title">종사자 평균 학력별</caption>
+            <caption className="table-caption">종사자 평균 학력별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -205,7 +175,7 @@ function RelatedMajors(props){
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
       return(
           <table className="jobs-table">
-            <caption className="title">종사자 평균 전공별</caption>
+            <caption className="table-caption">종사자 평균 전공별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -306,7 +276,7 @@ function ClickedJob(props){
     </table>
     <br/>
     <div className="see-more">
-      * 더 많은 정보를 원하신다면
+      * 해당 직업에 대하여 더 많은 정보를 알고 싶으시다면
       <a 
         className="nostyle-link" 
         href ={ `http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=${props.jobSeq}`} 
@@ -314,6 +284,8 @@ function ClickedJob(props){
         상세정보 
       </a>로 이동해주세요.
     </div>
+    {/* <Link to={'/recruit/'+props.params+'/'+props.data.job}><button className="glow-button">채용공고 보기</button></Link> */}
+    <a href={`https://www.work.go.kr/wnSearch/unifSrch.do?topQuery=`+props.data.job} className="glow-button" style={{display : 'inline-block'}}>채용공고 보기</a>
   </div>
   );
 }
@@ -404,8 +376,7 @@ function TestResult(){
 
     const getTestResult = useCallback(async()=>{
         const response = await axios.get(test_result_api);
-        console.log(response);
-        const gender = response.data.inspct.gender === 100323? "남성": "여성";
+        const gender = response.data.user.grade === "100323"? "남성": "여성";
         const date = new Date(response.data.inspct.registDt);
         setUserInfo({name: response.data.inspct.nm, gender: gender ,date: date.toLocaleDateString()});
 
@@ -474,7 +445,7 @@ function TestResult(){
           <div className="top-border"></div>
           <h2 ref={jobInfoComponent}>가치관과 관련이 높은 직업</h2>
           <br/>
-          {isLoading === 0 && jobData? <ClickedJob data={jobData} jobSeq={job}/>:<Loading loading={isLoading}/>}
+          {isLoading === 0 && jobData? <ClickedJob data={jobData} jobSeq={job} params={seq}/>:<Loading loading={isLoading}/>}
           <br/>
           {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob}/> : ""}
           <br/>

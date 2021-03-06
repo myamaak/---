@@ -46,8 +46,11 @@
     width: 80%;
 }
 
-.title{
+.table-caption{
     padding: 10px;
+    background-color: #00f9ff;
+    color: rgba(33, 33, 42, 1);
+    font-weight: bold;
 }
 
 .jobs-table{
