@@ -7,6 +7,8 @@ import KakaoShareButton from './KaKaoShare';
 import './TestResult.css';
 import API_KEY from '../config';
 
+import Cloud from "./Cloud"
+
 
 function Intro(){
     return(
@@ -94,10 +96,12 @@ class BarChart extends React.Component {
       );
     }
   }
-  
+
+
 function RelatedJobs(props){
   //아 api 구조 너무 화가 난다..!
   let jobsTableContents = [];
+  const [showModal, setShowModal] = useState(false);
 
   for (var i=0; i<props.factors.length; i++){
     let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
@@ -122,11 +126,12 @@ function RelatedJobs(props){
   });
 
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
-  console.log(finalContents);
+  console.log(props.cloud);
   
       return(
+        <>
           <table className="jobs-table">
-            <caption className="table-caption">종사자 평균 학력별</caption>
+            <caption className="table-caption" onClick={()=>{setShowModal(true);}}>종사자 평균 학력별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -143,11 +148,24 @@ function RelatedJobs(props){
               )})}
             </tbody>
           </table>
+          
+          {showModal?<div id="myModal" className="modal">
+
+            <div className="modal-content">
+              <span className="close" onClick={()=>{setShowModal(false);}}>X</span>
+              <span className="cloud-title">직업별 연봉</span>
+              <Cloud data = {props.cloud}></Cloud>
+            </div>
+
+          </div>:""}
+        </>
       );
 }
 
 function RelatedMajors(props){
   let jobsTableContents = [];
+
+  const[showModal, setShowModal]= useState(false);
 
   console.log(props.data);
   for (var i=0; i<props.factors.length; i++){
@@ -173,8 +191,9 @@ function RelatedMajors(props){
 
   finalContents = finalContents.filter(function(element){ return element[1] != "";});
       return(
+        <>
           <table className="jobs-table">
-            <caption className="table-caption">종사자 평균 전공별</caption>
+            <caption className="table-caption" onClick={()=>{setShowModal(true)}}>종사자 평균 전공별</caption>
             <thead>
               <tr>
                 <th>분야</th>
@@ -191,6 +210,16 @@ function RelatedMajors(props){
               )})}
             </tbody>
           </table>
+
+          {showModal?
+            <div id="myModal" className="modal">
+              <div className="modal-content">
+                <span className="close" onClick={()=>{setShowModal(false);}}>X</span>
+                <span className="cloud-title">직업별 연봉</span>
+                <Cloud data = {props.cloud}></Cloud>
+              </div>
+            </div>:""}
+        </>
       );
 }
 
@@ -356,6 +385,9 @@ function TestResult(){
     const [careersResult, setCareers] = useState();
     const [majorsResult, setMajors] = useState();
 
+    const [careerCloudData, setCareerCloudData] = useState();
+    const [majorsCloudData, setMajorsCloudData] = useState();
+
     const factors = ["능력발휘", "자율성", "보수", "안정성", "사회적 인정", "사회봉사", "자기계발", "창의성"];
     const careers = ['중졸이하','고졸','전문대졸','대졸','대학원졸'];
     const majors = ['계열무관','인문','사회','교육','공학','자연','의학','예체능'];
@@ -372,6 +404,49 @@ function TestResult(){
       setCareers(responseJobs.data);
       setMajors(responseMajors.data);
     },[maxScores]);
+
+    const getCloudData = useCallback(async()=>{
+      let request = {
+        params: {
+          "apiKey": API_KEY,
+          "svcType": "api",
+          "svcCode":"JOB",
+          "contentType":"json",
+          "gubun": "job_apti_list",
+          "perPage" : 1000
+        }
+      }
+
+      if (careersResult && majorsResult){
+        const response = await axios.get(jobs_data_api, request);
+      
+        let allJobs =  response.data.dataSearch.content;
+  
+        const careerNames = careersResult.map(([jobSeq, jobTitle, index])=>{
+          return jobTitle;
+        });
+
+        const majorJobNames = majorsResult.map(([jobSeq, jobTitle, index])=>{
+          return jobTitle;
+        });
+  
+
+        let careerData = [];
+        let majorData = [];
+        for (var i = 0 ; i<allJobs.length ; i++){
+          if(careerNames.includes(allJobs[i].job)){
+            careerData.push([allJobs[i].job, parseInt(allJobs[i].salery)]);
+          }
+          if(majorJobNames.includes(allJobs[i].job)){
+            majorData.push([allJobs[i].job, parseInt(allJobs[i].salery)]);
+          }
+        }
+        
+        setCareerCloudData(careerData);
+        setMajorsCloudData(majorData);
+      }
+
+    },[careersResult, majorsResult]);
 
     const getTestResult = useCallback(async()=>{
         const response = await axios.get(test_result_api);
@@ -424,10 +499,15 @@ function TestResult(){
     useEffect(()=>{
       if(job){
         setIsLoading(1);
-        
         getJobsData();
       }
     },[job]);
+
+    useEffect(()=>{
+
+        getCloudData();
+
+    },[majorsResult, careersResult]);
 
     console.log(isLoading);
 
@@ -446,9 +526,9 @@ function TestResult(){
           <br/>
           {isLoading === 0 && jobData? <ClickedJob data={jobData} jobSeq={job} params={seq}/>:<Loading loading={isLoading}/>}
           <br/>
-          {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob}/> : ""}
+          {careersResult? <RelatedJobs factors={careers} data={careersResult} do ={clickJob} cloud = {careerCloudData}/> : ""}
           <br/>
-          {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob}/> : ""}
+          {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob} cloud = {majorsCloudData}/> : ""}
           <br/>
           <div className="sharebutton">
             <KakaoShareButton/>

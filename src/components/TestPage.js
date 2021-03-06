@@ -199,7 +199,7 @@ function TestPage(){
     return(
         <form className="container" >
             <h2>검사 진행 {size? Math.ceil(size/answers.length*100): 0}%</h2>
-            <progress value={size} max={answers.length}></progress>
+            <progress value={size} max={answers.length} id="progress"></progress>
             {thisP}
             <div className ="pagination">
                 <button onClick={handleLeft} className="button-left">
