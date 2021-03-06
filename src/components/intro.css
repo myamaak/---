@@ -1,6 +1,7 @@
 .container{
     margin: auto;
     margin-top: 130px;
+    margin-bottom: 130px;
 }
 .box{
     display: inline-block;

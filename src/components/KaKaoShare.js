@@ -5,7 +5,7 @@ const KakaoShareButton = () => {
   
     useEffect(() => {
     createKakaoButton()
-  }, [])
+  }, []);
 
   const createKakaoButton = () => {
 
@@ -15,7 +15,7 @@ const KakaoShareButton = () => {
       if (!kakao.isInitialized()) {
         kakao.init(KAKAO_KEY)
       }
-      
+
       kakao.Link.createDefaultButton({
         container: '#kakao-link-btn',
         objectType: 'feed',

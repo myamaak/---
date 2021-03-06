@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext,useCallback, useMemo, useRef } f
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import { Helmet } from 'react-helmet'
 import { AnswersContext, UserContext } from '../context/Context';
 import KakaoShareButton from './KaKaoShare';
 import './TestResult.css';
@@ -452,9 +451,6 @@ function TestResult(){
           {majorsResult? <RelatedMajors factors={majors} data={majorsResult} do={clickJob}/> : ""}
           <br/>
           <div className="sharebutton">
-            <Helmet>
-              <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-            </Helmet>
             <KakaoShareButton/>
           </div>
           <br/>
