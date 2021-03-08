@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+### 웹 서비스 설치 및 실행
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- 서비스가 배포된 주소는 다음과 같습니다.
 
-## Available Scripts
+[http://elice-kdt-ai-track-vm-racer-19.koreacentral.cloudapp.azure.com/](http://elice-kdt-ai-track-vm-racer-19.koreacentral.cloudapp.azure.com/)
 
-In the project directory, you can run:
+- 혹은 로컬에서 git clone [주소]을 한 다음 주소로 이동,
 
-### `yarn start`
+```bash
+yarn
+yarn install
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+을 한 후 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+yarn start
+```
 
-### `yarn test`
+를 통해 웹서비스를 실행할 수 있습니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 실행
 
-### `yarn build`
+웹 서비스에서 보여지는 순서대로 기능을 안내합니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**검사 소개 페이지**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+맨 처음 페이지에서는 다양한 검사 소개를 볼 수 있습니다. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 커리어넷에서 제공하는 검사들 + 직업 가치관 검사에 대한 간략한 소개 페이지
+- 소개를 누르면 해당 검사로 이동 가능
+- 실제로 구현한 검사는 '직업가치관검사'
 
-### `yarn eject`
+**유저 설정**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- 이름과 성별을 입력하는 폼
+- 이름 혹은 성별을 입력하지 않았을 경우 에러 출력
+- 이름은 영어, 혹은 올바른 한글 이름만 허용. 아닐 시 에러 출력
+- 정보를 제대로 입력하지 않으면 검사 시작 비활성화
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**검사 예시 페이지**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- 검사를 시작하기 전 앞으로의 진행 방식에 대해서 설명하는 페이지를 구현
+- 검사 시작 버튼 구현 및 문항 미입력시 비활성화 기능
+- 진행 표시줄(예시이므로 진행상황은 기록되지 않음)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**검사 진행 페이지**
 
-## Learn More
+- 페이지당 5개 문항
+- 문항 미입력시 다음 버튼 비활성화
+- 이전 페이지에서 선택된 값 유지
+- Pagination 기능
+- 문항 진행 정도에 따른 진행 표시줄 변화
+- 검사의 문항 위에 커서를 올리면 상세설명을 표시
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**검사 완료 페이지**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 검사 완료 안내 페이지
 
-### Code Splitting
+**검사 결과 페이지**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 유저의 기본 정보 표시
+- 직업 가치관 결과에 대하여 항목 별로 수치를 표기
+- 가치관과 관련이 높은 직업을 결과에 따라 분류하여 표기
+    - 테이블의 제목 부분을 클릭하면 직업별 연봉에 따라 생성된 word cloud를 modal의 형태로 렌더링
+- 직업 이름을 선택하면 해당 직업에 대한 관련학과, 유사직업, 핵심 요구 능력 등을 표시
+    - 정보가 로딩되는 동안 loading shimmer을 렌더링
+    - 관련학과의 이름을 클릭하면 해당 학과에 대한 세부정보로 이동 가능
+    - 이외의 세부사항에 대해서 볼 수 있는 링크
+    - 채용공고 버튼을 누르면 관련 채용공고가 있는 페이지로 이동 가능
+- 카카오톡 로고 모양의 버튼을 누르면 해당 검사결과 페이지를 카카오톡으로 공유 가능
+- 다시 검사하기를 누르면 모든 정보가 초기화되고, 맨 처음 페이지로 이동합니다.

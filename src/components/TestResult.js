@@ -99,13 +99,12 @@ class BarChart extends React.Component {
 
 
 function RelatedJobs(props){
-  //아 api 구조 너무 화가 난다..!
   let jobsTableContents = [];
   const [showModal, setShowModal] = useState(false);
 
   for (var i=0; i<props.factors.length; i++){
     let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
-      return index==i+1?
+      return index===i+1?
       <button 
         style={{marginRight:"10px"}}
         key={jobSeq}
@@ -170,7 +169,7 @@ function RelatedMajors(props){
   console.log(props.data);
   for (var i=0; i<props.factors.length; i++){
     let eachRow = props.data.map(([jobSeq, jobTitle, index])=>{
-      return index==i?
+      return index===i?
         <button 
           key={jobSeq}
           value={jobSeq}
@@ -224,11 +223,6 @@ function RelatedMajors(props){
 }
 
 function ClickedJob(props){
-
-    //loading문제 해결
-    //state로 isloading 만약 로딩중이면 로딩중 띄워주기 -> loading shimmer
-    //axios cancel 찾아보기
-
 
   const chartColors = ['#015095', '#006caa','#0184ba','#0199c6','#3cb1d4','#72c6e0','#addde9'];
   const jobPossibility = props.data.job_possibility[0].chart_item_list;
@@ -289,18 +283,20 @@ function ClickedJob(props){
       {jobPossibilityData.length>0?<Doughnut data={doughnutData} options={options}></Doughnut>:""}
     </div>
     <table className="detail">
-      <tr>
-        <td>{props.data.similarJob?"유사한 직업":""}</td>
-        <td>{props.data.similarJob}</td>
-      </tr>
-      <tr>
-        <td>{relatedMajorsComponent?"관련 전공":""}</td>
-        <td>{relatedMajorsComponent}</td>
-      </tr>
-      <tr>
-        <td>{props.data.ability?"핵심 능력":""}</td>
-        <td>{props.data.ability}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>{props.data.similarJob?"유사한 직업":""}</td>
+          <td>{props.data.similarJob}</td>
+        </tr>
+        <tr>
+          <td>{relatedMajorsComponent?"관련 전공":""}</td>
+          <td>{relatedMajorsComponent}</td>
+        </tr>
+        <tr>
+          <td>{props.data.ability?"핵심 능력":""}</td>
+          <td>{props.data.ability}</td>
+        </tr>
+      </tbody>
     </table>
     <br/>
     <div className="see-more">
@@ -312,7 +308,6 @@ function ClickedJob(props){
         상세정보 
       </a>로 이동해주세요.
     </div>
-    {/* <Link to={'/recruit/'+props.params+'/'+props.data.job}><button className="glow-button">채용공고 보기</button></Link> */}
     <a href={`https://www.work.go.kr/wnSearch/unifSrch.do?topQuery=`+props.data.job} className="glow-button" style={{display : 'inline-block'}}>채용공고 보기</a>
   </div>
   );
@@ -363,10 +358,6 @@ function TestResult(){
     const majors_api = useMemo(()=>{
       return `https://inspct.career.go.kr/inspct/api/psycho/value/majors?no1=${maxScores[0]}&no2=${maxScores[1]}`;
     },[maxScores]);
-    // useMemo없이 동기적으로 api주소를 지정하는 코드를 짜면 맨 처음에 maxScores값이 -1인 채로 들어가고,
-    // maxScores값이 바뀐다고 해도 바뀐 값을 반영해서 변수를 재선언해주지 않는다.
-    // 따라서 useMemo를 사용해서 jobs api와 majors api를 선언해주면 좋다.
-
 
     const clickJob = e =>{
       setJob(e.target.value);
@@ -397,7 +388,7 @@ function TestResult(){
       setAnswers([]);
     }
 
-    //학력별 머시기 가져오는 함수
+
     const getJobs = useCallback(async()=>{
       const responseJobs = await axios.get(jobs_api);
       const responseMajors = await axios.get(majors_api);

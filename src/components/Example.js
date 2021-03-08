@@ -12,9 +12,7 @@ function Example(){
     useEffect(()=>{
         async function getEx(){
             const response = await axios.get(`https://www.career.go.kr/inspct/openapi/test/questions?apikey=${API_KEY}&q=6`);
-            // console.log(response.data.RESULT[0]);
             const ex = response.data.RESULT[0];
-            console.log("example", ex);
             setItem({question: ex.question, answer:[ex.answer01, ex.answer02], score: [ex.answerScore01, ex.answerScore02]});
         }
         getEx();
@@ -24,8 +22,6 @@ function Example(){
     const handleCheck = e =>{
         setCheck(e.target.value);
     }
-
-    console.log(check);
 
     return(
         <div className="container">
