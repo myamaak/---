@@ -46,8 +46,11 @@
     width: 80%;
 }
 
-.title{
+.table-caption{
     padding: 10px;
+    background-color: #00f9ff;
+    color: rgba(33, 33, 42, 1);
+    font-weight: bold;
 }
 
 .jobs-table{
@@ -66,6 +69,7 @@ td, th {
   }
 
 .nostyle-button{
+    display: inline-block;
     background: none;
 	color: #009fff;
 	border: none;
@@ -74,25 +78,28 @@ td, th {
 	cursor: pointer;
 	outline: inherit;
     margin: 10px;
+    transition: transform .12Ss ease-in-out;
 }
 
 .nostyle-button:hover{
     color: #b3e2ff;
-    font-size: 110%;
+    transform: scale(1.1);
 }
 
 .nostyle-link{
+    display: inline-block;
     color: #009fff;
     text-decoration: none;
     font: inherit;
 	cursor: pointer;
     margin-right: 10px;
     margin-left: 10px;
+    transition: transform .12Ss ease-in-out;
 }
 
 .nostyle-link:hover{
     color: #b3e2ff;
-    font-size: 110%;
+    transform: scale(1.1);
 }
 
 .see-more{
@@ -118,9 +125,10 @@ td, th {
     transition: all 0.2s ease-in-out;
 }
 
-.glow-button:hover {
+.glow-button:hover,.glow-button:focus {
     color: rgb(200, 200, 214);
     box-shadow: 0 5px 15px #80fcff;
+    outline: none;
   }
 
 
@@ -204,10 +212,11 @@ td, th {
 }
 }
 
-.no-style{
+#kakao-link-btn{
     background: inherit;
     border: none;
     cursor: pointer;
+    box-shadow: none;
 }
 
 .top-border{
@@ -220,3 +229,52 @@ td, th {
 .container-bottom{
     padding-bottom: 50px;
 }
+
+
+/* modal */
+
+
+/* The Modal (background) */
+.modal {
+    /* display: none; Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 10px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: hsla(0, 0%, 100%, 0.925);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .cloud-title{
+      color: rgba(33, 33, 42, 1);
+      font-size: 18px;
+      font-weight: bold;
+  }

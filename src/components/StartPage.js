@@ -21,9 +21,13 @@ function StartPage(){
     }
 
     const handleValidation = useCallback(()=>{
+      const nameReg = /^[가-힣]{2,4}$|^[a-zA-Z]{2,10}$/;
       if(!user.name){
         setError(state=>({...state, name:"이름을 입력해주세요."}));
-      }else{
+      }else if(!nameReg.test(user.name)){
+        setError(state=>({...state, name:"이름을 올바르게 입력해주세요."}));
+      }
+      else{
         setError(state=>({...state, name:""}));
       }
       if(!user.gender){

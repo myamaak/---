@@ -1,0 +1,39 @@
+.container{
+    margin: auto;
+    margin-top: 130px;
+    margin-bottom: 130px;
+}
+.box{
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    width: 300px;
+    height: 150px;
+    margin-bottom: 15px;
+}
+
+.box:hover {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.432);
+    width: 300px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.mybox{
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    width: 100px;
+    height: 100px;
+}
+.title{
+    margin-top: 40px;
+    display: inline-block;
+    color: #00f9ff;
+}
+
+.content{
+    display: inline-block;
+    font-size: 80%;
+    color: #00fbff70;
+    width: 80%;
+}

@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import {ExContext} from '../context/Context';
 import './TestPage.css';
 
-//컴포넌트 분리하고 싶은데 hook 관리가 너무 어려움...
-
 function Example(){
     const [item, setItem] = useState({question:'', answer:[], score:[]});
     const {check, setCheck} = useContext(ExContext);
@@ -28,14 +26,6 @@ function Example(){
     }
 
     console.log(check);
-    // const optionList = item.answer.map(
-    //     (each)=>(
-    //         <div>
-    //             <input type='radio' name='option' key={each.id}/>
-    //             {each}
-    //         </div>
-    //     ));
-    //option이 여러개일 경우를 대비해서 이런 식으로 코드를 짜고 싶은데 item.answer이 undefined로 나타남
 
     return(
         <div className="container">
@@ -53,7 +43,7 @@ function Example(){
                     </label>
                 </div>
             </div>
-            <Link to = '/'>
+            <Link to = '/intro'>
                 <button type="button" className="button-left" style={{width: "90px"}} type="button">
                     <span>이전</span>
                 </button>
