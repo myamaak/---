@@ -148,23 +148,6 @@ td, th {
     overflow: hidden;
 }
 
-/* .doughnut {
-    border-radius: 50%;
-    width :180px;
-    height: 180px;
-    margin: auto;
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-.middle{
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: rgba(33, 33, 42, 1);
-    border-radius: 50%;
-    margin-top: 50px;
-    margin-left: 50px;
-} */
 
 .doughnut{
     margin: auto;

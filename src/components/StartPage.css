@@ -45,10 +45,6 @@ input[type=text] {
   border: 1px solid #ff073a;
   outline: none;
 }
-/* .error .gender{
-  border: 1px solid #ff073a;
-  border-radius: 100%;
-} */
 
 .error .error-message {
   display: inline-block;

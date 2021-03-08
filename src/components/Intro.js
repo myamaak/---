@@ -1,32 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./intro.css";
 
-// const [fadeOut, setFadeOut] = useState(false);
-
-// var reSetTimeOut = window.setTimeout(setFadeOut(true), 3000);
-
-// useEffect(()=>{
-//     if(fadeOut){
-
-//     }
-//     }
-//     ,[fadeOut]);
-
-
-// function Slider(){
-//     return(
-//         <div className="slider-container">
-
-//         </div>
-//     );
-// }
 
 function Intro(){
 
     return(
         <div className="container">
-            {/* {fadeOut?"":<Slider></Slider>} */}
             <Link to='/intro' className="box" style={{marginTop: "-10px"}}>
                 <span className="title" >직업가치관검사</span>
                 <span className="content">직업과 관련된 다양한 가치 중, 어떤 가치를 주요하게 만족시키고 싶은지 알아볼 수 있습니다.</span>
